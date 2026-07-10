@@ -8,6 +8,7 @@ CREATE TABLE public.profiles (
     id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
     first_name TEXT,
     last_name TEXT,
+    email TEXT,
     role TEXT DEFAULT 'student' CHECK (role IN ('student', 'admin')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -19,6 +20,7 @@ CREATE TABLE public.courses (
     level TEXT NOT NULL CHECK (level IN ('A1', 'A2', 'B1', 'B2')),
     description TEXT,
     price DECIMAL(10,2) NOT NULL,
+    duration_months INTEGER, -- NULL o 0 significa vitalicio
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
@@ -39,7 +41,8 @@ CREATE TABLE public.enrollments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     student_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
     course_id UUID REFERENCES public.courses(id) ON DELETE CASCADE NOT NULL,
-    status TEXT DEFAULT 'active' CHECK (status IN ('active', 'completed', 'cancelled')),
+    status TEXT DEFAULT 'active' CHECK (status IN ('active', 'completed', 'cancelled', 'expired')),
+    expires_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     UNIQUE(student_id, course_id)
 );
@@ -70,13 +73,14 @@ CREATE POLICY "Users can update own profile" ON public.profiles FOR UPDATE USING
 -- Courses: Anyone can view active courses.
 CREATE POLICY "Anyone can view active courses" ON public.courses FOR SELECT USING (is_active = true);
 
--- Lessons: Only enrolled students can view lessons for their course.
+-- Lessons: Only enrolled students can view lessons for their course, provided enrollment hasn't expired.
 CREATE POLICY "Enrolled students can view lessons" ON public.lessons FOR SELECT USING (
     EXISTS (
         SELECT 1 FROM public.enrollments
         WHERE enrollments.course_id = lessons.course_id
         AND enrollments.student_id = auth.uid()
         AND enrollments.status = 'active'
+        AND (enrollments.expires_at IS NULL OR enrollments.expires_at > now())
     )
 );
 
@@ -92,8 +96,14 @@ CREATE POLICY "Students can update own progress_update" ON public.progress FOR U
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, first_name, last_name, role)
-  VALUES (new.id, new.raw_user_meta_data->>'first_name', new.raw_user_meta_data->>'last_name', 'student');
+  INSERT INTO public.profiles (id, first_name, last_name, email, role)
+  VALUES (
+    new.id, 
+    new.raw_user_meta_data->>'first_name', 
+    new.raw_user_meta_data->>'last_name', 
+    new.email,
+    'student'
+  );
   RETURN new;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

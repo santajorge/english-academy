@@ -27,13 +27,28 @@ export async function POST(request: Request) {
         const courseId = paymentData.metadata?.course_id
 
         if (studentId && courseId) {
+          // Obtener los detalles del curso para ver si expira
+          const { data: courseData } = await supabaseAdmin
+            .from('courses')
+            .select('duration_months')
+            .eq('id', courseId)
+            .single()
+
+          let expiresAt = null
+          if (courseData && courseData.duration_months) {
+            const date = new Date()
+            date.setMonth(date.getMonth() + courseData.duration_months)
+            expiresAt = date.toISOString()
+          }
+
           // Grant access to the course in Supabase
           const { error } = await supabaseAdmin
             .from('enrollments')
             .upsert({
               student_id: studentId,
               course_id: courseId,
-              status: 'active'
+              status: 'active',
+              expires_at: expiresAt
             }, {
               onConflict: 'student_id,course_id'
             })

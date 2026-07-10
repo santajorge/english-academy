@@ -127,7 +127,7 @@ export default function Home() {
 
               {/* Nivel B1 */}
               <div className="group bg-indigo text-white rounded-3xl p-8 border-4 border-night hover:-translate-y-2 transition-transform shadow-[8px_8px_0px_0px_rgba(236,92,137,1)] flex flex-col h-full relative overflow-hidden">
-                <div className="absolute -right-4 -top-4 bg-bee-yellow text-indigo text-xs font-black px-4 py-2 transform rotate-45 border-2 border-night">MÁS POPULAR</div>
+                <div className="absolute -right-8 top-6 bg-bee-yellow text-indigo text-[10px] font-black w-40 text-center py-1.5 transform rotate-45 border-y-2 border-night shadow-sm">MÁS POPULAR</div>
                 <div className="bg-bee-yellow text-indigo w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-night mb-6 transform -rotate-6">B1</div>
                 <h3 className="text-2xl font-black text-white mb-3">Intermediate</h3>
                 <p className="text-white/80 font-medium mb-8 flex-1">Siente la independencia. Expresa ideas complejas, viaja sin miedos y consume contenido en inglés.</p>
