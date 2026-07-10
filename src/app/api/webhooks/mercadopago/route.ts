@@ -5,13 +5,11 @@ import { createClient } from '@supabase/supabase-js' // Using vanilla supabase-j
 // Initialize MercadoPago client
 const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN! });
 
-// Initialize Supabase Admin Client (to bypass RLS for server-side insertions)
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY! // We need to add this to .env.local
-)
-
 export async function POST(request: Request) {
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY! // We need to add this to .env.local
+  )
   try {
     const url = new URL(request.url)
     const action = url.searchParams.get('type') || url.searchParams.get('topic')
