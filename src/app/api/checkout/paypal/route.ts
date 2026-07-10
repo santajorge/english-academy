@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+// @ts-expect-error - El SDK de PayPal no tiene tipos oficiales actualizados
 import paypal from '@paypal/checkout-server-sdk'
 import { createClient } from '@/utils/supabase/server'
 
