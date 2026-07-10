@@ -2,21 +2,19 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1A1A2E;
+  --gray-soft: #f8f9fa; /* Para los fondos suaves del LMS */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-gray-soft: var(--gray-soft);
+  --color-bee-yellow: #F4D03F;
+  --color-indigo: #47509A;
+  --color-pink: #EC5C89;
+  --color-night: #1A1A2E;
+  --font-sans: var(--font-outfit), Arial, Helvetica, sans-serif;
 }
 
 body {
