@@ -55,15 +55,15 @@ export default async function Home() {
                 </Link>
               </div>
             </div>
-            
+
             {/* Visual Decorativo */}
             <div className="relative w-full aspect-square max-w-md mx-auto lg:mx-0 lg:ml-auto">
               <div className="absolute inset-0 bg-pink rounded-[3rem] rotate-6 transform border-4 border-indigo shadow-[12px_12px_0px_0px_rgba(26,26,46,1)]"></div>
               <div className="absolute inset-0 bg-white rounded-[3rem] -rotate-3 transform border-4 border-night overflow-hidden flex items-center justify-center p-8">
-                <Image 
-                  src="/hero-bee.png" 
-                  alt="thebee'sniz mascot" 
-                  width={400} 
+                <Image
+                  src="/hero-bee.png"
+                  alt="thebee'sniz mascot"
+                  width={400}
                   height={400}
                   className="object-contain hover:scale-105 transition-transform duration-500"
                   priority
@@ -82,7 +82,7 @@ export default async function Home() {
               <h2 className="text-4xl lg:text-5xl font-black text-indigo mb-6">Un método que no da sueño 💤🚫</h2>
               <p className="text-xl text-night/70 font-medium">Aprender gramática es importante, pero hablarlo sin trabarte es la meta. Combinamos la teoría esencial con horas de práctica conversacional real.</p>
             </div>
-            
+
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center p-8 bg-gray-50 rounded-3xl border-2 border-gray-100 shadow-sm hover:border-pink transition-colors">
                 <div className="text-6xl mb-6">🎥</div>
@@ -119,11 +119,11 @@ export default async function Home() {
               {courses?.map((course) => {
                 const isB1 = course.level === 'B1';
                 const cardBg = isB1 ? 'bg-indigo text-white' : 'bg-white text-night';
-                const iconBg = isB1 ? 'bg-bee-yellow text-indigo' : 
-                  course.level === 'A1' ? 'bg-bee-yellow' : 
-                  course.level === 'A2' ? 'bg-pink text-white' : 'bg-night text-white';
+                const iconBg = isB1 ? 'bg-bee-yellow text-indigo' :
+                  course.level === 'A1' ? 'bg-bee-yellow' :
+                    course.level === 'A2' ? 'bg-pink text-white' : 'bg-night text-white';
                 const shadow = isB1 ? 'shadow-[8px_8px_0px_0px_rgba(236,92,137,1)]' : 'shadow-[8px_8px_0px_0px_rgba(71,80,154,1)]';
-                
+
                 return (
                   <div key={course.id} className={`group ${cardBg} rounded-3xl p-8 border-4 border-night hover:-translate-y-2 transition-transform ${shadow} flex flex-col h-full relative overflow-hidden`}>
                     {isB1 && (
@@ -179,7 +179,6 @@ export default async function Home() {
             </div>
             <div className="bg-bee-yellow p-8 lg:p-12 rounded-[3rem] text-night border-4 border-night transform rotate-2 shadow-[12px_12px_0px_0px_rgba(236,92,137,1)]">
               <div className="text-4xl font-black mb-6">"El mejor momento para plantar un árbol fue hace 20 años. El segundo mejor momento es ahora."</div>
-              <p className="font-bold text-xl text-night/80">– Carmen Niz</p>
             </div>
           </div>
         </section>
@@ -189,7 +188,7 @@ export default async function Home() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-bee-yellow rounded-full blur-3xl opacity-20 transform translate-x-1/2 -translate-y-1/2"></div>
           <div className="container mx-auto px-6">
             <h2 className="text-4xl lg:text-5xl font-black text-indigo text-center mb-16">Lo que dicen las abejitas felices</h2>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div className="bg-gray-50 p-8 rounded-3xl border-2 border-gray-100 relative mt-8">
                 <div className="absolute -top-6 left-8 w-12 h-12 bg-pink text-white flex items-center justify-center rounded-full text-2xl border-2 border-indigo shadow-[2px_2px_0px_0px_rgba(71,80,154,1)]">⭐</div>
