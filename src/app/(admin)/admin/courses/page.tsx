@@ -36,6 +36,7 @@ export default async function AdminCourses() {
       level: formData.get('level') as string,
       description: formData.get('description') as string,
       price: Number(formData.get('price')),
+      price_ars: formData.get('price_ars') ? Number(formData.get('price_ars')) : null,
       duration_months: duration,
       is_active: true
     });
@@ -49,15 +50,16 @@ export default async function AdminCourses() {
       <div className="bg-gray-800 p-8 rounded-3xl border border-gray-700 mb-12">
         <h2 className="text-xl font-bold mb-6">Crear Nuevo Curso</h2>
         <form action={createCourse} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input name="title" placeholder="Título del curso (ej. Inglés Básico)" required className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white" />
-          <select name="level" required className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white">
+          <input name="title" placeholder="Título del curso (ej. Inglés Básico)" required className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white md:col-span-2" />
+          <select name="level" required className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white md:col-span-2">
             <option value="A1">A1 (Principiante)</option>
             <option value="A2">A2 (Básico)</option>
             <option value="B1">B1 (Intermedio)</option>
             <option value="B2">B2 (Avanzado)</option>
           </select>
           <input name="price" type="number" step="0.01" placeholder="Precio (USD)" required className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white" />
-          <input name="duration" type="number" placeholder="Duración en meses (Vacío = Vitalicio)" className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white" />
+          <input name="price_ars" type="number" step="0.01" placeholder="Precio (ARS)" required className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white" />
+          <input name="duration" type="number" placeholder="Duración en meses (Vacío = Vitalicio)" className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white md:col-span-2" />
           <textarea name="description" placeholder="Descripción breve" required className="p-3 bg-gray-900 border border-gray-700 rounded-xl text-white md:col-span-2"></textarea>
           <button type="submit" className="md:col-span-2 bg-pink text-white font-bold py-3 rounded-xl hover:bg-pink/80 transition-colors">Guardar Curso</button>
         </form>
@@ -69,7 +71,7 @@ export default async function AdminCourses() {
           <div key={course.id} className="bg-gray-800 p-6 rounded-2xl border border-gray-700 flex justify-between items-center">
             <div>
               <div className="font-bold text-lg">{course.title} <span className="text-sm bg-gray-700 px-2 py-1 rounded ml-2 text-bee-yellow">{course.level}</span></div>
-              <div className="text-sm text-gray-400 mt-1">Precio: ${course.price} | Expiración: {course.duration_months ? `${course.duration_months} meses` : 'Vitalicio'}</div>
+              <div className="text-sm text-gray-400 mt-1">Precio: ${course.price} USD | ${course.price_ars} ARS | Expiración: {course.duration_months ? `${course.duration_months} meses` : 'Vitalicio'}</div>
             </div>
             <div className="text-sm px-3 py-1 bg-green-500/20 text-green-400 rounded-full font-medium">Activo</div>
           </div>

@@ -14,11 +14,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
-    const { courseId, title, price } = body
+    const formData = await request.formData()
+    const courseId = formData.get('courseId') as string
 
-    if (!courseId || !title || !price) {
-      return NextResponse.json({ error: 'Missing course details' }, { status: 400 })
+    if (!courseId) {
+      return NextResponse.json({ error: 'Missing courseId' }, { status: 400 })
+    }
+
+    // Buscar el precio REAL en la base de datos (Seguridad)
+    const { data: course, error: courseError } = await supabase
+      .from('courses')
+      .select('title, price_ars')
+      .eq('id', courseId)
+      .single()
+
+    if (courseError || !course || !course.price_ars) {
+      return NextResponse.json({ error: 'Course not found or price missing' }, { status: 404 })
     }
 
     // Initialize Preference client
@@ -30,10 +41,10 @@ export async function POST(request: Request) {
         items: [
           {
             id: courseId,
-            title: title,
+            title: course.title,
             quantity: 1,
-            unit_price: Number(price),
-            currency_id: 'USD', // O ARS, dependiendo de la moneda base
+            unit_price: Number(course.price_ars),
+            currency_id: 'ARS',
           }
         ],
         payer: {
@@ -52,7 +63,8 @@ export async function POST(request: Request) {
       }
     })
 
-    return NextResponse.json({ init_point: result.init_point })
+    // Redirigir directamente al link de pago
+    return NextResponse.redirect(result.init_point!, 303)
 
   } catch (error: any) {
     console.error('Error creating MP preference:', error)

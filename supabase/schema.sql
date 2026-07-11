@@ -19,7 +19,8 @@ CREATE TABLE public.courses (
     title TEXT NOT NULL,
     level TEXT NOT NULL CHECK (level IN ('A1', 'A2', 'B1', 'B2')),
     description TEXT,
-    price DECIMAL(10,2) NOT NULL,
+    price DECIMAL(10,2) NOT NULL, -- Asume USD
+    price_ars DECIMAL(10,2), -- Precio en Pesos Argentinos
     duration_months INTEGER, -- NULL o 0 significa vitalicio
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL

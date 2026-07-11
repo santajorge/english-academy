@@ -1,7 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
+import { createClient } from '@/utils/supabase/server';
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: courses } = await supabase
+    .from('courses')
+    .select('*')
+    .eq('is_active', true)
+    .order('level');
+
   return (
     <div className="min-h-screen bg-white selection:bg-pink selection:text-white flex flex-col">
       {/* Header Público */}
@@ -28,7 +36,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <main className="flex-1">
+      <main className="flex-1 w-full">
         <section className="relative overflow-hidden bg-bee-yellow py-20 lg:py-32 border-b-8 border-indigo">
           <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
             <div className="max-w-2xl">
@@ -49,7 +57,7 @@ export default function Home() {
             </div>
             
             {/* Visual Decorativo */}
-            <div className="relative aspect-square max-w-md mx-auto lg:mx-0 lg:ml-auto">
+            <div className="relative w-full aspect-square max-w-md mx-auto lg:mx-0 lg:ml-auto">
               <div className="absolute inset-0 bg-pink rounded-[3rem] rotate-6 transform border-4 border-indigo shadow-[12px_12px_0px_0px_rgba(26,26,46,1)]"></div>
               <div className="absolute inset-0 bg-white rounded-[3rem] -rotate-3 transform border-4 border-night overflow-hidden flex items-center justify-center p-8">
                 <Image 
@@ -95,58 +103,47 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Cursos Rápidos */}
+        {/* Cursos */}
         <section id="cursos" className="py-24 bg-gray-50 relative">
           <div className="container mx-auto px-6">
             <h2 className="text-4xl lg:text-5xl font-black text-night text-center mb-16">
               Elige tu nivel, nosotros te damos las alas
             </h2>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {/* Nivel A1 */}
-              <div className="group bg-white rounded-3xl p-8 border-4 border-indigo hover:-translate-y-2 transition-transform shadow-[8px_8px_0px_0px_rgba(71,80,154,1)] flex flex-col h-full">
-                <div className="bg-bee-yellow w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-indigo mb-6 transform -rotate-3">A1</div>
-                <h3 className="text-2xl font-black text-indigo mb-3">Beginner</h3>
-                <p className="text-night/70 font-medium mb-8 flex-1">Da tus primeros pasos. Aprende a presentarte, vocabulario básico y a sobrevivir en situaciones cotidianas.</p>
-                <div className="pt-6 border-t-2 border-gray-100 flex items-center justify-between">
-                  <span className="text-2xl font-black text-night">$49<span className="text-sm text-night/50">/mes</span></span>
-                  <button className="text-pink font-bold group-hover:underline">Ver plan →</button>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {courses?.length === 0 && (
+                <div className="col-span-full text-center text-gray-500 py-12">
+                  Próximamente publicaremos nuestros niveles. ¡Mantente atento!
                 </div>
-              </div>
+              )}
 
-              {/* Nivel A2 */}
-              <div className="group bg-white rounded-3xl p-8 border-4 border-indigo hover:-translate-y-2 transition-transform shadow-[8px_8px_0px_0px_rgba(71,80,154,1)] flex flex-col h-full">
-                <div className="bg-pink text-white w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-indigo mb-6 transform rotate-3">A2</div>
-                <h3 className="text-2xl font-black text-indigo mb-3">Elementary</h3>
-                <p className="text-night/70 font-medium mb-8 flex-1">Conéctate más con el mundo. Mejora tu gramática y sostén conversaciones más largas y fluidas.</p>
-                <div className="pt-6 border-t-2 border-gray-100 flex items-center justify-between">
-                  <span className="text-2xl font-black text-night">$49<span className="text-sm text-night/50">/mes</span></span>
-                  <button className="text-pink font-bold group-hover:underline">Ver plan →</button>
-                </div>
-              </div>
-
-              {/* Nivel B1 */}
-              <div className="group bg-indigo text-white rounded-3xl p-8 border-4 border-night hover:-translate-y-2 transition-transform shadow-[8px_8px_0px_0px_rgba(236,92,137,1)] flex flex-col h-full relative overflow-hidden">
-                <div className="absolute -right-8 top-6 bg-bee-yellow text-indigo text-[10px] font-black w-40 text-center py-1.5 transform rotate-45 border-y-2 border-night shadow-sm">MÁS POPULAR</div>
-                <div className="bg-bee-yellow text-indigo w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-night mb-6 transform -rotate-6">B1</div>
-                <h3 className="text-2xl font-black text-white mb-3">Intermediate</h3>
-                <p className="text-white/80 font-medium mb-8 flex-1">Siente la independencia. Expresa ideas complejas, viaja sin miedos y consume contenido en inglés.</p>
-                <div className="pt-6 border-t-2 border-white/20 flex items-center justify-between">
-                  <span className="text-2xl font-black text-bee-yellow">$59<span className="text-sm text-white/50">/mes</span></span>
-                  <button className="text-pink font-bold group-hover:underline">Ver plan →</button>
-                </div>
-              </div>
-
-              {/* Nivel B2 */}
-              <div className="group bg-white rounded-3xl p-8 border-4 border-indigo hover:-translate-y-2 transition-transform shadow-[8px_8px_0px_0px_rgba(71,80,154,1)] flex flex-col h-full">
-                <div className="bg-night text-white w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-indigo mb-6 transform rotate-6">B2</div>
-                <h3 className="text-2xl font-black text-indigo mb-3">Upper Int.</h3>
-                <p className="text-night/70 font-medium mb-8 flex-1">Domina la conversación. Prepárate para el ámbito profesional, exámenes internacionales y debates.</p>
-                <div className="pt-6 border-t-2 border-gray-100 flex items-center justify-between">
-                  <span className="text-2xl font-black text-night">$69<span className="text-sm text-night/50">/mes</span></span>
-                  <button className="text-pink font-bold group-hover:underline">Ver plan →</button>
-                </div>
-              </div>
+              {courses?.map((course) => {
+                const isB1 = course.level === 'B1';
+                const cardBg = isB1 ? 'bg-indigo text-white' : 'bg-white text-night';
+                const iconBg = isB1 ? 'bg-bee-yellow text-indigo' : 
+                  course.level === 'A1' ? 'bg-bee-yellow' : 
+                  course.level === 'A2' ? 'bg-pink text-white' : 'bg-night text-white';
+                const shadow = isB1 ? 'shadow-[8px_8px_0px_0px_rgba(236,92,137,1)]' : 'shadow-[8px_8px_0px_0px_rgba(71,80,154,1)]';
+                
+                return (
+                  <div key={course.id} className={`group ${cardBg} rounded-3xl p-8 border-4 border-night hover:-translate-y-2 transition-transform ${shadow} flex flex-col h-full relative overflow-hidden`}>
+                    {isB1 && (
+                      <div className="absolute -right-8 top-6 bg-bee-yellow text-indigo text-[10px] font-black w-40 text-center py-1.5 transform rotate-45 border-y-2 border-night shadow-sm">MÁS POPULAR</div>
+                    )}
+                    <div className={`${iconBg} w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black border-2 border-night mb-6 transform -rotate-6`}>{course.level}</div>
+                    <h3 className={`text-2xl font-black mb-3 ${isB1 ? 'text-white' : 'text-indigo'}`}>{course.title}</h3>
+                    <p className={`font-medium mb-8 flex-1 ${isB1 ? 'text-white/80' : 'text-night/70'}`}>{course.description}</p>
+                    <div className={`pt-6 border-t-2 ${isB1 ? 'border-white/20' : 'border-gray-100'} flex items-center justify-between`}>
+                      <div className="flex flex-col">
+                        <span className={`text-xl font-black ${isB1 ? 'text-bee-yellow' : 'text-indigo'}`}>${course.price} <span className={`text-xs ${isB1 ? 'text-white/50' : 'text-night/50'}`}>USD</span></span>
+                        {course.price_ars && (
+                          <span className={`text-sm font-bold ${isB1 ? 'text-pink' : 'text-pink'}`}>${course.price_ars.toLocaleString()} <span className="text-xs">ARS</span></span>
+                        )}
+                      </div>
+                      <Link href={`/dashboard/checkout/${course.id}`} className={`font-bold ${isB1 ? 'text-pink group-hover:text-white' : 'text-pink group-hover:text-indigo'} transition-colors`}>Comprar →</Link>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
