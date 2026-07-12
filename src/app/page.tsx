@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { createClient } from '@/utils/supabase/server';
+import PublicNavbar from '@/components/PublicNavbar';
 
 export default async function Home() {
   const supabase = await createClient();
@@ -12,28 +13,7 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-white selection:bg-pink selection:text-white flex flex-col">
-      {/* Header Público */}
-      <header className="sticky top-0 z-50 w-full border-b-4 border-indigo bg-bee-yellow shadow-lg">
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="text-3xl font-black tracking-tight text-indigo uppercase transform -rotate-2">
-            thebee'sniz
-          </div>
-          <nav className="hidden md:flex gap-8 font-bold text-night text-lg">
-            <Link href="#cursos" className="hover:text-pink transition-colors">Cursos</Link>
-            <Link href="#metodologia" className="hover:text-pink transition-colors">Método</Link>
-            <Link href="#beneficios" className="hover:text-pink transition-colors">Beneficios</Link>
-            <Link href="#testimonios" className="hover:text-pink transition-colors">Reseñas</Link>
-          </nav>
-          <div className="flex gap-2 sm:gap-4">
-            <Link href="/login" className="hidden sm:inline-block px-6 py-2.5 rounded-full font-bold text-night hover:bg-white/50 transition-colors border-2 border-transparent">
-              Entrar
-            </Link>
-            <Link href="#cursos" className="px-6 py-2.5 rounded-full font-black text-white bg-pink hover:bg-pink/90 hover:-translate-y-1 transition-all shadow-[4px_4px_0px_0px_rgba(71,80,154,1)] border-2 border-indigo text-sm sm:text-base">
-              Comenzar ya
-            </Link>
-          </div>
-        </div>
-      </header>
+      <PublicNavbar />
 
       {/* Hero Section */}
       <main className="flex-1 w-full">
