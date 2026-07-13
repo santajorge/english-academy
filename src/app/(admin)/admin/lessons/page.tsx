@@ -30,13 +30,19 @@ export default async function AdminLessons() {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
     
-    await supabaseAdmin.from('lessons').insert({
+    const { error } = await supabaseAdmin.from('lessons').insert({
       title: formData.get('title') as string,
       course_id: formData.get('course_id') as string,
       description: formData.get('description') as string,
       vimeo_id: formData.get('vimeo_id') as string,
       order_index: Number(formData.get('order_index'))
     });
+
+    if (error) {
+      console.error('Error al insertar lección:', error);
+      throw new Error(error.message);
+    }
+    
     revalidatePath('/admin/lessons');
   }
 
