@@ -11,8 +11,15 @@ export default async function AdminLessons() {
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single();
   if (!profile || profile.role !== 'admin') redirect('/dashboard');
 
-  const { data: courses } = await supabase.from('courses').select('id, title').order('created_at', { ascending: false });
-  const { data: lessons } = await supabase.from('lessons').select('*, courses(title)').order('created_at', { ascending: false });
+  // Crear cliente admin para bypasear RLS al buscar datos (para que el admin pueda ver todo)
+  const { createClient: createAdminClient } = await import('@supabase/supabase-js');
+  const supabaseAdmin = createAdminClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
+  const { data: courses } = await supabaseAdmin.from('courses').select('id, title').order('created_at', { ascending: false });
+  const { data: lessons } = await supabaseAdmin.from('lessons').select('*, courses(title)').order('created_at', { ascending: false });
 
   async function createLesson(formData: FormData) {
     'use server'
@@ -22,8 +29,7 @@ export default async function AdminLessons() {
 
     const { data: profile } = await sbUser.from('profiles').select('role').eq('id', user.id).single();
     if (!profile || profile.role !== 'admin') throw new Error('Unauthorized');
-
-    // Usar admin client para bypass RLS
+    
     const { createClient: createAdminClient } = await import('@supabase/supabase-js');
     const supabaseAdmin = createAdminClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
