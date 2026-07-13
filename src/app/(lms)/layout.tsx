@@ -22,9 +22,11 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
           </Link>
         </nav>
         <div className="p-4 border-t border-gray-100">
-          <Link href="/" className="flex items-center gap-3 px-4 py-3 text-night/60 hover:text-pink rounded-xl font-medium transition-colors">
-            <span>🚪</span> Salir
-          </Link>
+          <form action="/api/auth/logout" method="POST">
+            <button type="submit" className="w-full flex items-center gap-3 px-4 py-3 text-night/60 hover:text-pink rounded-xl font-medium transition-colors">
+              <span>🚪</span> Salir
+            </button>
+          </form>
         </div>
       </aside>
 
@@ -61,6 +63,12 @@ export default function LMSLayout({ children }: { children: React.ReactNode }) {
           <span className="text-xl">👤</span>
           <span className="text-[10px] font-medium mt-1">Perfil</span>
         </Link>
+        <form action="/api/auth/logout" method="POST" className="flex flex-col items-center">
+          <button type="submit" className="flex flex-col items-center text-gray-400">
+            <span className="text-xl">🚪</span>
+            <span className="text-[10px] font-medium mt-1">Salir</span>
+          </button>
+        </form>
       </nav>
     </div>
   );

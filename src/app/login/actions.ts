@@ -14,10 +14,24 @@ export async function login(formData: FormData) {
     password: formData.get('password') as string,
   }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { data: authData, error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
     redirect('/login?error=' + encodeURIComponent(error.message))
+  }
+
+  // Comprobar rol para evitar parpadeos
+  if (authData.user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', authData.user.id)
+      .single()
+
+    if (profile?.role === 'admin') {
+      revalidatePath('/admin/courses', 'layout')
+      redirect('/admin/courses')
+    }
   }
 
   revalidatePath('/dashboard', 'layout')

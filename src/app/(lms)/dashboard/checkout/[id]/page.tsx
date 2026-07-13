@@ -1,20 +1,22 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 
-export default async function CheckoutPage({ params }: { params: { id: string } }) {
+export default async function CheckoutPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  const courseId = params.id;
   const supabase = await createClient();
   
   // Verificamos que el usuario esté logueado
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    redirect(`/login?callbackUrl=/dashboard/checkout/${params.id}`);
+    redirect(`/login?callbackUrl=/dashboard/checkout/${courseId}`);
   }
 
   // Obtenemos los datos del curso
   const { data: course } = await supabase
     .from('courses')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', courseId)
     .single();
 
   if (!course) {
