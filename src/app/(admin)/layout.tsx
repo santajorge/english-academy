@@ -21,9 +21,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Link>
         </nav>
         <div className="p-4 border-t border-gray-700">
-          <Link href="/dashboard" className="block px-4 py-3 text-gray-400 hover:text-white rounded-xl font-medium transition-colors">
-            ← Volver al LMS
-          </Link>
+          <form action="/api/auth/logout" method="POST">
+            <button type="submit" className="w-full text-left block px-4 py-3 text-gray-400 hover:text-white rounded-xl font-medium transition-colors">
+              🚪 Cerrar sesión
+            </button>
+          </form>
         </div>
       </aside>
 
